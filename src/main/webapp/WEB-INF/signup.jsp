@@ -84,6 +84,8 @@
                 <label for="reg-repeat">Repeat password</label>
             </div>
         </div>
+
+
         <div class="row">
             <div class="input-field col s6">
                 <label>
@@ -91,13 +93,15 @@
                     <span>I agree with privacy policy</span>
                 </label>
             </div>
-            <div class="file-field input-field">
-                <div class="btn deep-purple lighter-2">
-                    <span><i class="material-icons">photo_library</i></span>
-                    <input type="file" name="reg-avatar">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Photo avatar">
+            <div class="col s6">
+                <div class="file-field input-field">
+                    <div class="btn deep-purple lighter-2">
+                        <span><i class="material-icons">photo_library</i></span>
+                        <input type="file" name="reg-avatar">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Photo avatar">
+                    </div>
                 </div>
             </div>
         </div>

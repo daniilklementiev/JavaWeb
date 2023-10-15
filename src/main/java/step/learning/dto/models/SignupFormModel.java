@@ -111,7 +111,7 @@ public class SignupFormModel {
             throw new RuntimeException("Invalid file extension");
         }
         // generate file dir
-        String uploadDir = formParseResult.getRequest().getServletContext().getRealPath("./uploads/avatar/");
+        String uploadDir = formParseResult.getRequest().getServletContext().getRealPath("./upload/avatar/");
         // generate random file name
         String savedFilename;
         File savedFile;
