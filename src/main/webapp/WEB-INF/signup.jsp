@@ -58,6 +58,9 @@
                 <i class="material-icons prefix">badge</i>
                 <input id="reg-name" name="reg-name" type="text" class="validate" value="Experienced user">
                 <label for="reg-name">Real name</label>
+                <% if(validationErrors.containsKey("name")) {%>
+                    <span class="helper-text" data-error="<%=validationErrors.get("name")%>"></span>
+                <%} %>
             </div>
         </div>
         <div class="row">
@@ -65,11 +68,17 @@
                 <i class="material-icons prefix">alternate_email</i>
                 <input id="reg-email" name="reg-email" type="email" class="validate" value="user@email.co">
                 <label for="reg-email">Email</label>
+                <% if(validationErrors.containsKey("email")) {%>
+                <span class="helper-text" data-error="<%=validationErrors.get("email")%>"></span>
+                <%} %>
             </div>
             <div class="input-field col s6">
                 <i class="material-icons prefix">calendar_month</i>
                 <input id="reg-birthday" name="reg-birthday" type="date" class="validate" value="2000-10-20">
                 <label for="reg-birthday">Birth day</label>
+                <% if(validationErrors.containsKey("birthdate")) {%>
+                <span class="helper-text" data-error="<%=validationErrors.get("birthdate")%>"></span>
+                <%} %>
             </div>
         </div>
         <div class="row">
@@ -77,11 +86,17 @@
                 <i class="material-icons prefix">password</i>
                 <input id="reg-password" name="reg-password" type="password" class="validate" value="123">
                 <label for="reg-password">Password</label>
+                <% if(validationErrors.containsKey("password")) {%>
+                <span class="helper-text" data-error="<%=validationErrors.get("password")%>"></span>
+                <%} %>
             </div>
             <div class="input-field col s6">
                 <i class="material-icons prefix">password</i>
                 <input id="reg-repeat" name="reg-repeat" type="password" class="validate" value="123">
                 <label for="reg-repeat">Repeat password</label>
+                <% if(validationErrors.containsKey("repeat")) {%>
+                <span class="helper-text" data-error="<%=validationErrors.get("repeat")%>"></span>
+                <%} %>
             </div>
         </div>
 

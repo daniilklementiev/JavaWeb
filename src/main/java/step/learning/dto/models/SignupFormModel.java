@@ -14,17 +14,6 @@ import java.util.regex.Pattern;
 
 public class SignupFormModel {
     private static final SimpleDateFormat formDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    //    public SignupFormModel(HttpServletRequest request) throws ParseException {
-    //        this.setLogin(request.getParameter("reg-login"));
-    //        this.setName(request.getParameter("reg-name"));
-    //        this.setPassword(request.getParameter("reg-password"));
-    //        this.setRepeat(request.getParameter("reg-repeat"));
-    //        this.setEmail(request.getParameter("reg-email"));
-    //        this.setBirthdate(request.getParameter("reg-birthdate"));
-    //        this.setIsAgree(request.getParameter("reg-agree"));
-    //    }
-
     public SignupFormModel(FormParseResult formParseResult) throws ParseException {
         Map<String, String> fields = formParseResult.getFields();
         this.setLogin(fields.get("reg-login"));
@@ -59,21 +48,42 @@ public class SignupFormModel {
         if(name == null || name.isEmpty()) {
             result.put("name", "Name is required");
         }
+        else if(name.length() < 2 ) {
+            result.put("name", "Name is too short");
+        }
+        else if( ! Pattern.matches( "^[a-zA-Zа-яА-ЯёЁ0-9_-]+$", name ) ) {
+            result.put("name", "Name contains invalid characters");
+        }
+
         if(password == null || password.isEmpty()) {
             result.put("password", "Password is required");
         }
+        else if(password.length() < 6 ) {
+            result.put("password", "Password is too short");
+        }
+        else if( ! Pattern.matches( "^[a-zA-Z0-9_-]+$", password ) ) {
+            result.put("password", "Password contains invalid characters");
+        }
+
         if(repeat == null || repeat.isEmpty()) {
             result.put("repeat", "Repeat password is required");
         }
-        assert repeat != null;
-        if(repeat.equals(password)) {
+        else if(!repeat.equals(password)) {
             result.put("repeat", "Passwords must be equal");
         }
+        assert repeat != null;
         if(email == null || email.isEmpty()) {
             result.put("email", "Email is required");
         }
+        else if( ! Pattern.matches( "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", email ) ) {
+            result.put("email", "Email is invalid");
+        }
+
         if(birthDate == null) {
             result.put("birthdate", "Birthdate is required");
+        }
+        else if(birthDate.after(new Date())) {
+            result.put("birthdate", "Birthdate must be in past");
         }
         if(isAgree == null || !isAgree) {
             result.put("agree", "You must agree with terms");
@@ -98,7 +108,7 @@ public class SignupFormModel {
     public void setAvatar(FormParseResult formParseResult) {
         Map<String, FileItem> files = formParseResult.getFiles();
         if(! files.containsKey("reg-avatar")) {
-            this.avatar = null;
+            this.avatar = "/upload/avatar/no-photo.png";
             return;
         }
         FileItem fileItem = files.get("reg-avatar");
