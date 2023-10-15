@@ -3,6 +3,7 @@ package step.learning.ioc;
 import com.google.inject.servlet.ServletModule;
 import step.learning.filters.CharsetFilter;
 import step.learning.filters.CultureFilter;
+import step.learning.filters.UserAgentFilter;
 import step.learning.servlets.*;
 
 public class RouterModule extends ServletModule {
@@ -10,6 +11,7 @@ public class RouterModule extends ServletModule {
     protected void configureServlets() {
         filter("/*").through(CharsetFilter.class);
         filter("/*").through(CultureFilter.class);
+        filter("/*").through(UserAgentFilter.class);
 
         serve("/").with(HomeServlet.class);
         serve("/filters").with(FiltersServlet.class);
