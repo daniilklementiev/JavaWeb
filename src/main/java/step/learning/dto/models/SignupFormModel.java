@@ -26,12 +26,6 @@ public class SignupFormModel {
 
         this.setAvatar(formParseResult);
     }
-
-    /*
-    * Валидация каждого поля и формирование уведомления про ошибки.
-    * Пустой ответ означает успешную валидацию
-    * @return словарь "имя поля" - "уведомление об ошибке"
-    * */
     public Map<String, String> getValidationErrorMessages(){
         Map<String, String> result = new HashMap<>();
         if(login == null || login.isEmpty()) {

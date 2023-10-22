@@ -15,29 +15,6 @@
     <%=request.getAttribute("culture")%>
 </p>
 <p>
-<%--    <%if(validationErrors.containsKey("name")){   %>--%>
-<%--    <span class="error"><strong><%=validationErrors.get("name")%></strong></span>--%>
-<%--    <% } %>--%>
-<%--    <br>--%>
-<%--    <%if(validationErrors.containsKey("password")){   %>--%>
-<%--    <span class="error"><strong><%=validationErrors.get("password")%></strong></span>--%>
-<%--    <% } %>--%>
-<%--    <br>--%>
-<%--    <%if(validationErrors.containsKey("repeat")){   %>--%>
-<%--    <span class="error"><strong><%=validationErrors.get("repeat")%></strong></span>--%>
-<%--    <% } %>--%>
-<%--    <br>--%>
-<%--    <%if(validationErrors.containsKey("email")){   %>--%>
-<%--    <span class="error"><strong><%=validationErrors.get("email")%></strong></span>--%>
-<%--    <% } %>--%>
-<%--    <br>--%>
-<%--    <%if(validationErrors.containsKey("agree")){   %>--%>
-<%--    <span class="error"><strong><%=validationErrors.get("agree")%></strong></span>--%>
-<%--    <% } %>--%>
-<%--    <br>--%>
-<%--    <%if(validationErrors.containsKey("birthdate")){   %>--%>
-<%--    <span class="error"><strong><%=validationErrors.get("birthdate")%></strong></span>--%>
-<%--    <% } %>--%>
 </p>
 <div class="row">
     <form class="col s12" method="POST" enctype="multipart/form-data">

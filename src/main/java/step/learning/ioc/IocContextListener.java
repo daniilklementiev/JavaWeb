@@ -9,7 +9,8 @@ public class IocContextListener extends GuiceServletContextListener {
     protected Injector getInjector() {
         return Guice.createInjector(
                 new RouterModule(),
-                new ServicesModule()
+                new ServicesModule(),
+                new LoggingModule()
         );
     }
 }

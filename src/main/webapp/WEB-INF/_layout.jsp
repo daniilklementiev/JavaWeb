@@ -1,15 +1,17 @@
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String pageBody = (String) request.getAttribute("page-body");
     String context = request.getContextPath();
     String contextCulture = context + "/" + request.getAttribute("culture") + "/";
+    long time = new Date().getTime();
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="<%=context%>/css/site.css">
+        <link rel="stylesheet" href="<%=context%>/css/site.css?<%=time%>">
         <title>Java web</title>
     </head>
     <body>
@@ -30,13 +32,15 @@
              <li <%= pageBody.equals("ioc.jsp") ? "class='active'" : "" %>
                 ><a href="<%=contextCulture%>ioc">Ioc</a>
              </li>
+             <li <%= pageBody.equals("db.jsp") ? "class='active'" : "" %>
+             ><a href="<%=contextCulture%>db">Database</a>
+             </li>
          </ul>
          </div>
     </nav>
     <div class="container">
         <jsp:include page="<%=pageBody%>"/>
     </div>
-
 
     <footer class="page-footer deep-purple">
         <div class="container">
@@ -70,7 +74,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="<%=context%>/js/site.js"></script>
+    <script src="<%=context%>/js/site.js?<%=time%>"></script>
 
     </body>
 </html>
