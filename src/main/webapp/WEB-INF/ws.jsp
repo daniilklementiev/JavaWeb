@@ -78,10 +78,10 @@
   }
 
   function onWsMessage(e) {
-      const chatMessage = JSON.parse(e.data);
+    const chatMessage = JSON.parse(e.data);
       switch (chatMessage.status){
         case 201: // broadcast
-                appendMessage(chatMessage.data);
+                appendMessage(chatMessage.data, chatMessage.date);
                 break;
         case 202: // token accepted, .data==nik
                 enableChat(chatMessage.data);
@@ -112,12 +112,51 @@
     appendMessage("You are not authorized");
   }
 
-  function appendMessage(message) {
-    const chatContainer = document.getElementById("chat-container");
+  function appendMessage(msg, date) {
     const li = document.createElement("li");
     li.className = "collection-item";
-    li.innerText = message;
-    chatContainer.appendChild(li);
+
+    const div = document.createElement("div");
+    div.style.display = "flex";
+
+    const spanText = document.createElement("span");
+    spanText.innerText = msg;
+
+    const spanDate = document.createElement("span");
+    // spanDate.className = "secondary-content";
+    spanDate.style.color = "rgb(128,128,128);"
+    spanDate.style.marginLeft = "auto";
+    const msgDate = new Date(date);
+    const now = new Date();
+    spanDate.style.fontSize = "x-small";
+    spanDate.innerText = getMsgDateStr(msgDate, now);
+
+    div.appendChild(spanText);
+    div.appendChild(spanDate);
+
+    li.appendChild(div);
+    document.getElementById("chat-container").appendChild(li);
+  }
+
+  function getMsgDateStr(msgDate, nowDate) {
+    const diffTime = nowDate - msgDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+      return `Today, ${msgDate.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+    } else if (diffDays === 1) {
+      return `Yesterday, ${msgDate.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+    } else if (diffDays >= 2 && diffDays <= 3) {
+      return `${diffDays} days ago`;
+    } else {
+      return msgDate.toLocaleString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
   }
 
   function onWsError(e) {

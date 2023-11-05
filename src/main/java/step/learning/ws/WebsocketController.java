@@ -11,7 +11,9 @@ import step.learning.dto.entities.ChatMessage;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -101,10 +103,25 @@ public class WebsocketController {
         }
     }
 
+    public static void sendToSession(Session session, JsonObject jsonObject){
+        try {
+            session.getBasicRemote().sendText(jsonObject.toString());
+        } catch (Exception ex) {
+            System.err.println("sendToSession: " + ex.getMessage());
+        }
+    }
+
     public static void broadcast(String message) {
-        sessions.forEach(session ->
-            sendToSession(session, 201, message)
-        );
+        JsonObject response = new JsonObject();
+        response.addProperty("status", 201);
+        response.addProperty("data", message);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date javaDate = new Date();
+        String formattedDate = formatter.format(javaDate);
+        response.addProperty("date", formattedDate);
+        sessions.forEach(session -> {
+            sendToSession(session, response);
+        });
     }
 
 }
