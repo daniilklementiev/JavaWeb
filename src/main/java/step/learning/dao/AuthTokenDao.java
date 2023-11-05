@@ -71,10 +71,24 @@ public class AuthTokenDao extends DaoBase {
         return false;
     }
 
+
     public AuthToken getTokenByCredentials(String login, String password) {
         User user = userDao.getUserByCredentials(login, password);
         if (user == null) {
             return null;
+        }
+        String sql = "SELECT BIN_TO_UUID(`jti`) AS jti, `sub`, `iat`, `exp` FROM " + dbPrefix + "auth_tokens t " +
+                "INNER JOIN " + dbPrefix + "users u ON t.sub = u.id " +
+                "WHERE u.login = ?";
+        try (PreparedStatement prep = dbProvider.getConnection().prepareStatement(sql)){
+            prep.setString(1, login);
+            ResultSet resultSet = prep.executeQuery();
+            if(resultSet.next()){
+                return new AuthToken(resultSet);
+            }
+        }
+        catch (Exception ex){
+            logger.log(Level.WARNING, ex.getMessage() + " -- " + sql);
         }
         AuthToken token = new AuthToken();
         token.setJti(UUID.randomUUID().toString());
@@ -86,7 +100,7 @@ public class AuthTokenDao extends DaoBase {
         token.setIat(new Date(now.getTime()));
         token.setExp(new Date(now.getTime() + 1000L * 60 * 60 * 24));
 
-        String sql = "INSERT INTO " + dbPrefix + "auth_tokens (`jti`, `sub`, `iat`, `exp`) VALUES (UUID_TO_BIN(?), ?, ?, ?)";
+        sql = "INSERT INTO " + dbPrefix + "auth_tokens (`jti`, `sub`, `iat`, `exp`) VALUES (UUID_TO_BIN(?), ?, ?, ?)";
         try (PreparedStatement prep = dbProvider.getConnection().prepareStatement(sql)) {
             prep.setString(1, token.getJti());
             prep.setString(2, token.getSub());
