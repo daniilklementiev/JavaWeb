@@ -70,7 +70,8 @@ public class WebsocketController {
                     return;
                 }
                 session.getUserProperties().put("token", token);
-                sendToSession(session, 202, token.getNik());
+                broadcast(token.getNik() + " joined the chat");
+//                sendToSession(session, 202, token.getNik())
                 break;
             }
             case "chat": {
