@@ -13,7 +13,7 @@ public class RandomServiceV1 implements RandomService{
 
     @Override
     public void seed(String iv) {
-        random.setSeed(iv.length());
+        random.setSeed(Long.parseLong(iv));
     }
 
     @Override

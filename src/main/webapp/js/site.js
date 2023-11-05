@@ -1,9 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    M.Modal.init(document.querySelectorAll('.modal'), {
-        opacity: 0.6,
-        inDuration: 200,
-        outDuration: 200
-    });
     // db.jsp
     const callMeButton = document.getElementById('db-call-me-button');
     if (callMeButton) {

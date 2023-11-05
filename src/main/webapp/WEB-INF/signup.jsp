@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="input-field col s6">
+            <div class="input-field col s3">
                 <i class="material-icons prefix">password</i>
                 <input id="reg-password" name="reg-password" type="password" class="validate" value="123">
                 <label for="reg-password">Password</label>
@@ -67,7 +67,7 @@
                 <span class="helper-text" data-error="<%=validationErrors.get("password")%>"></span>
                 <%} %>
             </div>
-            <div class="input-field col s6">
+            <div class="input-field col s3">
                 <i class="material-icons prefix">password</i>
                 <input id="reg-repeat" name="reg-repeat" type="password" class="validate" value="123">
                 <label for="reg-repeat">Repeat password</label>

@@ -35,6 +35,12 @@
              <li <%= pageBody.equals("db.jsp") ? "class='active'" : "" %>
              ><a href="<%=contextCulture%>db">Database</a>
              </li>
+             <li <%= pageBody.equals("spa.jsp") ? "class='active'" : "" %>
+             ><a href="<%=contextCulture%>spa">SPA</a>
+             </li>
+             <li <%= pageBody.equals("ws.jsp") ? "class='active'" : "" %>
+             ><a href="<%=contextCulture%>ws">Websocket</a>
+             </li>
          </ul>
          </div>
     </nav>
@@ -65,16 +71,45 @@
     <div id="auth-modal" class="modal">
         <div class="modal-content">
             <h4>Authentication</h4>
-            <p>A bunch of text</p>
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">face</i>
+                    <input id="auth-login" type="text" class="">
+                    <label for="auth-login">Login</label>
+                </div>
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">password</i>
+                    <input id="auth-password" type="password" class="">
+                    <label for="auth-password">Password</label>
+                </div>
+            </div>
+
         </div>
         <div class="modal-footer">
+            <b id="auth-message-container"></b>
             <a href="<%=context%>/signup" class="modal-close deep-purple lighten-2 btn-flat ">Registration</a>
-            <a href="<%=context%>/singin" class=" waves-effect deep-purple lighten-3 btn-flat">Login</a>
+            <button id="auth-modal-sign-in-button" class=" waves-effect deep-purple lighten-3 btn-flat">Login</button>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="<%=context%>/js/site.js?<%=time%>"></script>
+    <script src="<%=context%>/js/site.js"></script>
+    <script src="<%=context%>/js/auth.js?<%=time%>"></script>
 
     </body>
 </html>
+
+<script>
+    window.addEventListener('load', checkAuth);
+    function checkAuth(){
+        const token = JSON.parse(atob(window.localStorage.getItem('token')));
+        const exp = new Date(token.exp);
+        if(exp < new Date()){
+            window.localStorage.removeItem('token');
+            window.location.reload();
+            M.toast({html: 'Your token is expired'});
+        }
+        M.toast({html: 'Your token is valid'});
+    }
+
+</script>

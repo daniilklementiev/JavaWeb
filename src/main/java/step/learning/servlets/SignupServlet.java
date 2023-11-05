@@ -2,6 +2,7 @@ package step.learning.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import step.learning.dao.UserDao;
 import step.learning.dto.models.SignupFormModel;
 import step.learning.services.culture.ResourceProvider;
 import step.learning.services.formparse.FormParseResult;
@@ -21,11 +22,13 @@ import java.util.Map;
 public class SignupServlet extends HttpServlet {
     private final ResourceProvider resourceProvider;
     private final FormParseService fromParseService;
+    private final UserDao userDao;
 
     @Inject
-    public SignupServlet(ResourceProvider resourceProvider, FormParseService fromParseService) {
+    public SignupServlet(ResourceProvider resourceProvider, FormParseService fromParseService, UserDao userDao) {
         this.resourceProvider = resourceProvider;
         this.fromParseService = fromParseService;
+        this.userDao = userDao;
     }
 
     @Override
@@ -40,10 +43,13 @@ public class SignupServlet extends HttpServlet {
                 req.setAttribute("reg-model", session.getAttribute("reg-data"));
                 Map<String, String> validationErrors = formModel == null ? new HashMap<String, String>() : formModel.getValidationErrorMessages();
                 for(String key : validationErrors.keySet()) {
-                   //  req.setAttribute("reg-" + key + "-error", resourceProvider.getString(validationErrors.get(key)));
                     validationErrors.put(key, resourceProvider.getString(validationErrors.get(key)));
                 }
                 req.setAttribute("validationErrors", validationErrors);
+                if(validationErrors.isEmpty() && formModel != null) {
+                    // модель валидная, добавляем в базу
+                    userDao.addFromForm(formModel);
+                }
             }
         }
         req.setAttribute("page-body", "signup.jsp");

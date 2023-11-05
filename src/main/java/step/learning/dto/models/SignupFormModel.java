@@ -21,7 +21,7 @@ public class SignupFormModel {
         this.setPassword(fields.get("reg-password"));
         this.setRepeat(fields.get("reg-repeat"));
         this.setEmail(fields.get("reg-email"));
-        this.setBirthdate(fields.get("reg-birthdate"));
+        this.setBirthdate(fields.get("reg-birthday"));
         this.setIsAgree(fields.get("reg-agree"));
 
         this.setAvatar(formParseResult);
@@ -45,7 +45,7 @@ public class SignupFormModel {
         else if(name.length() < 2 ) {
             result.put("name", "Name is too short");
         }
-        else if( ! Pattern.matches( "^[a-zA-Zа-яА-ЯёЁ0-9_-]+$", name ) ) {
+        else if( ! Pattern.matches( "^[a-zA-Zа-яА-ЯёЁ0-9_ -]+$", name ) ) {
             result.put("name", "Name contains invalid characters");
         }
 
@@ -73,12 +73,10 @@ public class SignupFormModel {
             result.put("email", "Email is invalid");
         }
 
-        if(birthDate == null) {
-            result.put("birthdate", "Birthdate is required");
-        }
-        else if(birthDate.after(new Date())) {
+        if(birthDate != null && birthDate.after(new Date())) {
             result.put("birthdate", "Birthdate must be in past");
         }
+
         if(isAgree == null || !isAgree) {
             result.put("agree", "You must agree with terms");
         }
