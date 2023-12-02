@@ -1,5 +1,6 @@
 package step.learning.ws;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.inject.Inject;
@@ -70,8 +71,8 @@ public class WebsocketController {
                     return;
                 }
                 session.getUserProperties().put("token", token);
+                sendToSession(session, 202, token.getNik());
                 broadcast(token.getNik() + " joined the chat");
-//                sendToSession(session, 202, token.getNik())
                 break;
             }
             case "chat": {
@@ -80,6 +81,24 @@ public class WebsocketController {
                 chatMessageDao.add(chatMessage);
                 broadcast(token.getNik() + ": " + data);
                 authTokenDao.renewal(token);
+                break;
+            }
+            case "load": {
+                // загрузить 10 последних сообщения из бд чата
+                AuthToken token = (AuthToken) session.getUserProperties().get("token");
+                if (token != null) {
+                    JsonObject response = new JsonObject();
+                    response.addProperty("status", 200);
+                    JsonArray array = new JsonArray();
+                    for(ChatMessage chatMessage : chatMessageDao.getLastMessages()){
+                        array.add(chatMessage.toJsonObject());
+                    }
+                    response.add("data", array);
+                    sendToSession(session, response);
+                }
+                else {
+                    sendToSession(session, 403, "Token rejected");
+                }
                 break;
             }
             default:

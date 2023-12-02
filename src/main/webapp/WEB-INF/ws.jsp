@@ -47,7 +47,7 @@
     const token = JSON.parse(atob(window.localStorage.getItem('token')));
     // document.getElementById("chat-token").innerText = "Token expires at: " + ;
     const exp = new Date(token.exp);
-    document.getElementById("chat-token").innerText = 'Token expires at: ' + dateString(exp);
+    document.getElementById("chat-token").innerText = exp > new Date() ? 'Token expires at: ' + dateString(exp) : "Token expired at: " + dateString(exp);
     const host = window.location.host + getAppContext();
     const ws = new WebSocket(`ws://${host}/chat`);
     ws.onopen = onWsOpen;
@@ -66,7 +66,6 @@
   }
 
   function onWsOpen(e) {
-    // console.log(e, "Connection established");
     window.websocket.send(JSON.stringify({
       command: 'auth',
       data: window.localStorage.getItem('token')
@@ -80,11 +79,15 @@
   function onWsMessage(e) {
     const chatMessage = JSON.parse(e.data);
       switch (chatMessage.status){
+        case 200: // load last messages array
+                loadChatMessages(chatMessage.data, chatMessage.date);
+                break;
         case 201: // broadcast
                 appendMessage(chatMessage.data, chatMessage.date);
                 break;
         case 202: // token accepted, .data==nik
                 enableChat(chatMessage.data);
+                wsSend("load", "");
                 break;
         case 403: // token rejected
                 disableChat();
@@ -94,6 +97,17 @@
                 break;
       }
 
+  }
+
+  function loadChatMessages(messages) {
+    messages.forEach(appendChatObject);
+  }
+
+  function appendChatObject(obj) {
+      var moment = new Date(obj.moment);
+      console.log(moment);
+      appendMessage(`${obj.senderNik}: ${obj.message}`, obj.moment);
+      console.log(obj);
   }
 
   function enableChat(nik) {
@@ -111,6 +125,8 @@
     }
     appendMessage("You are not authorized");
   }
+
+
 
   function appendMessage(msg, date) {
     const li = document.createElement("li");
@@ -130,7 +146,7 @@
     const now = new Date();
     spanDate.style.fontSize = "x-small";
     spanDate.innerText = getMsgDateStr(msgDate, now);
-
+    console.log(msgDate, getMsgDateStr(msgDate, now));
     div.appendChild(spanText);
     div.appendChild(spanDate);
 
@@ -161,6 +177,15 @@
 
   function onWsError(e) {
       console.log("Error: " + e.data);
+  }
+
+  function wsSend(command, data) {
+    window.websocket.send(
+            JSON.stringify({
+              command: command,
+              data: data
+            })
+    );
   }
 
   function getAppContext() {
