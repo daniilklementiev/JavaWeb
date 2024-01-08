@@ -49,7 +49,6 @@ public class AuthServlet extends HttpServlet {
         sendResponse(resp, 202, encodedToken);
     }
 
-    // метод для установления статуса, описания проблемы и отправки
     private void sendResponse( HttpServletResponse resp, int status, Object body ) throws IOException {
         resp.setStatus( status );
         resp.setContentType( "application/json" );

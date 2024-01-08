@@ -10,58 +10,9 @@
     if (authModalSignInButton) {
         authModalSignInButton.addEventListener('click', signInButtonClick);
     }
-
-    const spaContainer = document.getElementById('spa-container');
-    if(spaContainer) {
-        const token = window.localStorage.getItem('token');
-        if(token) {
-            spaContainer.innerText = token;
-        }
-        else {
-            spaContainer.innerText = 'No token';
-        }
-    }
-
-    const spaLogoutButton = document.getElementById('spa-btn-logout');
-    if(spaLogoutButton) {
-        spaLogoutButton.addEventListener('click', spaLogoutClick);
-    }
-    const spaGetInfoButton = document.getElementById('spa-btn-get-info');
-    if(spaGetInfoButton) {
-        spaGetInfoButton.addEventListener('click', spaGetInfoClick);
-    }
-
 });
 
-function spaLogoutClick() {
-    window.localStorage.removeItem('token');
-    window.location.reload();
-}
 
-function spaGetInfoClick() {
-    const container = document.getElementById('spa-container');
-    if(!container) {
-        throw "#spa-container not found";
-    }
-    fetch(`${getAppContext()}/uk/tpl/template1.html`, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token'),
-        }
-    } ).then(r=>r.text()).then(t=>{
-        container.innerHTML = t;
-    });
-    fetch(`${getAppContext()}/uk/tpl/NP.png`, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token'),
-        }
-    } ).then(r=>r.blob()).then(b=>{
-        const blobUrl = URL.createObjectURL(b);
-        console.log(blobUrl);
-        container.innerHTML += `<img src="${blobUrl}">`;
-    });
-}
 
 function onModalOpens() {
     const {authLogin, authPassword, authMessage} = getModalElements();
@@ -107,7 +58,7 @@ function signInButtonClick() {
         return;
     }
 
-    const url = `${getAppContext()}/auth?login=${login}&password=${password}`;
+    const url = `${getAppContext()}/uk/auth?login=${login}&password=${password}`;
     fetch(url).then(r=> {
         if(r.status === 202) {
             r.json().then(encodedToken => {
@@ -119,6 +70,8 @@ function signInButtonClick() {
                     }
                     else {
                         window.localStorage.setItem('token', encodedToken);
+                        // put token to cookies
+                        document.cookie = `userId=${token.sub}`;
                         window.location.reload();
                     }
                 }catch (e) {

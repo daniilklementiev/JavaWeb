@@ -109,4 +109,20 @@ public class UserDao {
         return null;
 
     }
+
+
+    public User getUserById(String id) {
+        String sql = "SELECT u.* FROM " + dbPrefix + "users u WHERE u.id = ?";
+        try(PreparedStatement prep = dbProvider.getConnection().prepareStatement(sql)) {
+            prep.setString(1, id);
+            ResultSet resultSet = prep.executeQuery();
+            if(resultSet.next()) {
+                return new User(resultSet);
+            }
+        }
+        catch(Exception e) {
+            logger.log(Level.WARNING, e.getMessage() + " -- " + sql);
+        }
+        return null;
+    }
 }

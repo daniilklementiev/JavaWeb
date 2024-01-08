@@ -28,12 +28,6 @@ public class AuthTokenDao extends DaoBase {
     private final Logger logger;
     private final UserDao userDao;
 
-    /**
-     * @param dbProvider
-     * @param dbPrefix
-     * @param logger
-     * @param userDao
-     */
     @Inject
     public AuthTokenDao(DbProvider dbProvider, @Named("db-prefix") String dbPrefix, Logger logger, UserDao userDao) {
         super(dbProvider, logger);
@@ -135,5 +129,13 @@ public class AuthTokenDao extends DaoBase {
             logger.log(Level.WARNING, e.getMessage() + " -- " + sql);
         }
         return null;
+    }
+
+    public User getUserByToken(String bearerContent) {
+        AuthToken token = getTokenByBearer(bearerContent);
+        if (token == null) {
+            return null;
+        }
+        return userDao.getUserById(token.getSub());
     }
 }
